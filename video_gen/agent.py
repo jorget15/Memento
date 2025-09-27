@@ -42,8 +42,18 @@ class VideoGenerationAgent:
 
     def __init__(self):
         logger.info('Initializing VideoGenerationAgent...')
+        
+        # Load environment variables
+        from dotenv import load_dotenv
+        load_dotenv()
+        
         try:
-            self.genai_client = genai.Client()
+            # Get API key from environment
+            api_key = os.getenv('GOOGLE_API_KEY')
+            if not api_key:
+                raise ValueError("GOOGLE_API_KEY not found in environment variables")
+            
+            self.genai_client = genai.Client(api_key=api_key)
             logger.info('Google GenAI client initialized.')
         except Exception as e:
             logger.error(f'Failed to initialize Google GenAI client: {e}')
